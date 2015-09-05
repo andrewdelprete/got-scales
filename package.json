@@ -1,0 +1,19 @@
+{
+  "name": "got-scales",
+  "version": "1.0.0",
+  "description": "Got Scales? is a simple Javascript module that allows you to create music scales and chords.",
+  "main": "build/gotScales.js",
+  "scripts": {
+    "compile": "babel src/ -d build/",
+    "prepublish": "npm run compile",
+    "test": "babel-tape-runner tests/**/*.js | faucet"
+  },
+  "author": "Andrew Del Prete <pathsofdesign@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "babel-tape-runner": "^1.2.0",
+    "lodash": "^3.10.1",
+    "tape": "^4.2.0"
+  }
+}
