@@ -13,4 +13,7 @@ import { gotScales, scaleFormulas, chordFormulas }  from 'got-scales'
 
 var gMajorScale = gotScales.create("G", scaleFormulas.major)
 var aMinorChord = gotScales.create("A", chordFormulas.minor)
+
+console.log(gMajorScale.getNotes()) // ['G','A','B','C','D','E','F# / Gb','G']
+console.log(aMinorChord.getNotes()) // ['A','C','E']
 ```
