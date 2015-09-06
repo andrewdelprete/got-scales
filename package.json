@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "babel src/ -d build/",
     "prepublish": "npm run compile",
-    "test": "babel-tape-runner tests/**/*.js | faucet"
+    "test": "babel-tape-runner tests/**/*.js",
+    "test-pretty": "babel-tape-runner tests/**/*.js | faucet"
   },
   "author": "Andrew Del Prete <pathsofdesign@gmail.com>",
   "license": "MIT",
