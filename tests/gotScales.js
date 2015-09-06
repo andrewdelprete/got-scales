@@ -1,42 +1,48 @@
 import test from 'tape';
-import { gotScales, scaleFormulas, chordFormulas } from '../src/gotScales.es6';
+import gotScales from '../src/gotScales.es6';
 
-test('C major scale', function (t) {
-    var scale = gotScales.create("C", scaleFormulas.major);
-    t.plan(1);
-    t.deepEqual(scale.getNotes(), ['C','D','E','F','G','A','B','C']);
-});
-
-test('C major chord', function (t) {
-    var chord = gotScales.create("C", chordFormulas.major);
-    t.plan(1);
-    t.deepEqual(chord.getNotes(), ['C','E','G']);
-});
-
-test('A minor scale', function (t) {
-    var scale = gotScales.create("A", scaleFormulas.minor);
-    t.plan(1);
-    t.deepEqual(scale.getNotes(), ['A','B','C','D','E','F','G','A']);
-});
-
-test('D# major scale', function (t) {
-    var scale = gotScales.create("D#", scaleFormulas.minor);
-    t.plan(1);
-    t.deepEqual(scale.getNotes(), ['D# / Eb', 'F', 'F# / Gb', 'G# / Ab', 'A# / Bb', 'B', 'C# / Db', 'D# / Eb']);
-});
-
-test('4th note in C major scale should be F', function (t) {
-    var chord = gotScales.create("C", scaleFormulas.major);
-    t.plan(1);
-    t.equal(chord.get(3), 'F');
-});
-
-test('Note specified on create() can either be natural, sharp, or flat.', function (t) {
+test('Should return single note', function (t) {
     t.plan(2);
 
-    var chord = gotScales.create("C", scaleFormulas.major);
-    t.equal(chord.rootNote.note, 'C');
+    var note = gotScales.note('C');
+    t.deepEqual(note.get(), 'C');
 
-    chord = gotScales.create("Bb", scaleFormulas.major);
-    t.equal(chord.rootNote.note, 'A# / Bb');
+    // Make sure we can just pass in part of the sharp / flat combo and still return the note
+    var note = gotScales.note('C#');
+    t.deepEqual(note.get(), 'C# / Db');
+});
+
+test('Should create scale with the provided root note and pattern', function (t) {
+    t.plan(1);
+
+    var note = gotScales.note('C');
+    t.deepEqual(note.scale(gotScales.scaleFormulas.major).getNotes(), ['C','D','E','F','G','A','B','C']);
+});
+
+test('Should create major scale', function (t) {
+    t.plan(1);
+
+    var note = gotScales.note("C");
+    t.deepEqual(note.scale(gotScales.scaleFormulas.major).getNotes(), ['C','D','E','F','G','A','B','C']);
+});
+
+test('Should create minor scale', function (t) {
+    t.plan(1);
+
+    var note = gotScales.note("A");
+    t.deepEqual(note.scale(gotScales.scaleFormulas.minor).getNotes(), ['A','B','C','D','E','F','G','A']);
+});
+
+test('Should create major chord', function (t) {
+    t.plan(1);
+
+    var note = gotScales.note("C");
+    t.deepEqual(note.scale(gotScales.chordFormulas.major).getNotes(), ['C','E','G']);
+});
+
+test('Should create minor chord', function (t) {
+    t.plan(1);
+
+    var note = gotScales.note("A");
+    t.deepEqual(note.scale(gotScales.chordFormulas.minor).getNotes(), ['A','C','E']);
 });

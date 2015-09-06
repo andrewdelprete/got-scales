@@ -10,13 +10,12 @@ Got Scales? is a simple Javascript module that allows you to create music scales
 
 
 ## Usage
-
 ```javascript
-import { gotScales, scaleFormulas, chordFormulas } from 'got-scales'
+import gotScales from 'got-scales'
 
-var gMajorScale = gotScales.create("G", scaleFormulas.major)
-var aMinorChord = gotScales.create("A", chordFormulas.minor)
+var gMajorScale = gotScales.note("G")
+var aMinorChord = gotScales.note("A")
 
-console.log(gMajorScale.getNotes()) // ['G','A','B','C','D','E','F# / Gb','G']
-console.log(aMinorChord.getNotes()) // ['A','C','E']
+console.log(gMajorScale.scale(gotScales.scaleFormulas.major).getNotes()) // ['G','A','B','C','D','E','F# / Gb','G']
+console.log(aMinorChord.scale(gotScales.chordFormulas.minor).getNotes()) // ['A','C','E']
 ```
