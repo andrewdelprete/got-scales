@@ -1,4 +1,7 @@
-# Got Scales?
+# Got Scales? [![Build Status][ci-img]][ci]
+
+[ci-img]: https://travis-ci.org/Pathsofdesign/got-scales.svg
+[ci]: https://travis-ci.org/pathsofdesign/got-scales
 
 Got Scales? is a simple Javascript module that allows you to create music scales and chords.
 
@@ -9,7 +12,7 @@ Got Scales? is a simple Javascript module that allows you to create music scales
 ## Usage
 
 ```javascript
-import { gotScales, scaleFormulas, chordFormulas }  from 'got-scales'
+import { gotScales, scaleFormulas, chordFormulas } from 'got-scales'
 
 var gMajorScale = gotScales.create("G", scaleFormulas.major)
 var aMinorChord = gotScales.create("A", chordFormulas.minor)
