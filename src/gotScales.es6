@@ -100,19 +100,31 @@ export var gotScales = {
      */
     create: function(note, formula) {
         let music = Object.create(this);
-            music.notes = formula.pattern.map((n) => this.sortByNote(note, notesArray)[n]);
-            music.formula = formula;
-            music.rootNote = note;
+
+        // Searches notesArray to find passed note
+        music.rootNote = notesArray.filter((n) => this.hasNoteInString(n.note, note))[0];
+        music.notes = formula.pattern.map((n) => this.sortByNote(music.rootNote)[n]);
+        music.formula = formula;
 
         return music;
     },
 
     /**
-     * Retrieve an Array of notes
-     * @return { Array }
+     * Check to see if the note provided is available in a string
+     * @param  { String }  haystack
+     * @param  { String }  needle
+     * @return { Boolean }
      */
-    getNotes: function() {
-        return this.notes.map((n) => n.note);
+    hasNoteInString: function (haystack, needle) {
+        if (needle.length > 1) {
+            // If note is a sharp or flat
+            var re = new RegExp(needle + '+', 'i');
+        } else {
+            // If note is natural
+            var re = new RegExp(needle + '$', 'i');
+        }
+
+        return re.test(haystack);
     },
 
     /**
@@ -122,11 +134,27 @@ export var gotScales = {
      * @return { Array }
      */
     sortByNote: function (note) {
-        let assignedNote = _.find(notesArray, { note });
+        let assignedNote = _.find(notesArray, note);
         let notePosition = _.findIndex(notesArray, assignedNote);
         let afterNote = _.slice(notesArray, notePosition);
         let beforeNote = _.slice(notesArray, 0, notePosition);
 
         return afterNote.concat(beforeNote, [ assignedNote ]);
+    },
+
+    /**
+     * Retrieve a specific note from the scale
+     * @return { String }
+     */
+    get: function(int) {
+        return this.notes[int].note
+    },
+
+    /**
+     * Retrieve an Array of notes
+     * @return { Array }
+     */
+    getNotes: function() {
+        return this.notes.map((n) => n.note);
     }
 };
