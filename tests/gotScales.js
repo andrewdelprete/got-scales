@@ -1,15 +1,26 @@
 import test from 'tape';
 import gotScales from '../src/gotScales.es6';
 
-test('Should return single note', function (t) {
-    t.plan(2);
+test('Should return single note with different note variations passed', function (t) {
+    t.plan(4);
 
     var note = gotScales.note('C');
     t.deepEqual(note.get(), 'C');
 
     // Make sure we can just pass in part of the sharp / flat combo and still return the note
-    var note = gotScales.note('C#');
-    t.deepEqual(note.get(), 'C# / Db');
+    var note = gotScales.note('Db');
+    t.equal(note.get(), 'C# / Db');
+
+    // Make sure we can pass in the whole shebang
+    var note = gotScales.note('C# / Db');
+    t.equal(note.get(), 'C# / Db');
+
+    // Test out errors
+    try {
+        var note = gotScales.note('C# / Dbb');
+    } catch(err) {
+        t.deepEqual(err, new Error('Error: Note does not exist.'));
+    }
 });
 
 test('Should create scale with the provided root note and pattern', function (t) {

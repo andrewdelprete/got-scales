@@ -43,44 +43,54 @@ var scaleFormulas = {
 var chordFormulas = {
     'major': {
         name: 'Major',
-        pattern: [0, 4, 7]
+        pattern: [0, 4, 7],
+        regex: /^[a-g]?(#|b)?(maj)?$/i
     },
     'minor': {
         name: 'Minor',
-        pattern: [0, 3, 7]
+        pattern: [0, 3, 7],
+        regex: /^[a-g]?(#|b)?(m)?(min)?$/i
     }
 };
 
+/**
+ * A simple helper object that may be used between other objects
+ * @type {Object}
+ */
 var Helpers = {
     /**
-     * Check to see if the note provided is available in a string
+     * Fetch a note from the notesArray. Can be in format 'C', 'C#', 'C# / Db'
      * @param  { String }  haystack
-     * @param  { String }  needle
      * @return { Boolean }
      */
-    stringHasNote: function (haystack, needle) {
-        if (needle.length > 1) {
-            // If note is a sharp or flat
-            var re = new RegExp(needle + '+', 'i');
-        } else {
-            // If note is natural
-            var re = new RegExp(needle + '$', 'i');
+    fetchNote: function (note) {
+        var note = _.find(notesArray, (n) => {
+            return _.contains(n, note)
+        })
+
+        if (!note) {
+            throw new Error('gotScales - Note does not exist.')
         }
 
-        return re.test(haystack);
+        return note
     }
 }
 
+/**
+ * Create a note object from a given note string
+ * @type {Object}
+ */
 var NoteFactory = {
     helpers: Helpers,
 
     create: function(note) {
+
         // Add NoteFactory as a prototype
         let self = Object.create(NoteFactory);
 
         // Private Methods
         self.passedNote = note;
-        self.rootNote = notesArray.filter((n) => self.helpers.stringHasNote(n, note))[0];
+        self.rootNote = self.helpers.fetchNote(note)
 
         return self;
     },
@@ -112,7 +122,8 @@ var ScaleFactory = {
 
         // Private Methods
         // Searches notesArray to find passed note
-        self.rootNote = notesArray.filter((n) => self.helpers.stringHasNote(n, note))[0];
+        self.rootNote = self.helpers.fetchNote(note)[0];
+        self.passedNote = note;
         self.notes = formula.pattern.map((n) => self.sortByNote(note)[n]);
         self.formula = formula;
 
