@@ -47,6 +47,11 @@ export var chordFormulas = [
         regex: /^[a-g]?(#|b)?(maj)?$/i
     },
     {
+        name: 'Major7',
+        pattern: [0, 4, 7, 11],
+        regex: /^[a-g]?(#|b)?(maj)?7$/i
+    },
+    {
         name: 'Minor',
         pattern: [0, 3, 7],
         regex: /^[a-g]?(#|b)?(m)?(min)?$/i
@@ -81,10 +86,22 @@ export var Helpers = {
      * @param  { Array } notesArray
      * @return { Array }
      */
-    sortByNote: function (note) {
+    sortByNote: function (note, formula) {
+        let interval = null
         let notePosition = _.findIndex(notesArray, (n) => _.contains(n, note))
         let afterNote = _.slice(notesArray, notePosition);
         let beforeNote = _.slice(notesArray, 0, notePosition);
+
+        // If formula goes passed the first internal of notes, add additional notes to the end of the array
+        if (formula instanceof Array) {
+            interval = _.max(formula) > 11 ? _.max(formula) : null
+
+            for (let x = 0; x < (interval - 11); x++) {
+                beforeNote.push(notesArray[x])
+            }
+
+            return afterNote.concat(beforeNote);
+        }
 
         // Ex: ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C']
         return afterNote.concat(beforeNote, [ note ]);
@@ -185,16 +202,19 @@ export var ScaleFactory = {
         // Searches notesArray to find passed note
         self.rootNote = self.helpers.fetchNote(note);
         self.passedNote = note;
+        self.sortedNotesArray = self.helpers.sortByNote(note, formula)
+
+        // console.log(self.sortedNotesArray)
 
         // By default we look for the passed formula and return the entire object if found
         if (!forceFormula) {
             self.formula = self.helpers.findFormula(formula, scaleFormulas);
-            self.notes = self.formula.pattern.map((n) => self.helpers.sortByNote(note)[n]);
+            self.notes = self.formula.pattern.map((n) => self.sortedNotesArray[n]);
 
         // If forceFormula is set then allow for any pattern to be created and just set it on self.pattern
         } else {
             self.pattern = formula;
-            self.notes = self.pattern.map((n) => self.helpers.sortByNote(note)[n]);
+            self.notes = self.pattern.map((n) => self.sortedNotesArray[n]);
         }
 
         return self;
@@ -237,9 +257,10 @@ export var ChordFactory = {
         // Searches notesArray to find passed note
         self.passedChord = chord;
         self.chord = self.fetchChord(chord);
+        self.sortedNotesArray = self.helpers.sortByNote(chord.charAt(0) + self.helpers.retrieveSharpOrFlat(chord.charAt(1)));
 
         // Sorts the notesArray by the given rootNote on the chord and appends whether it's a sharp or flat
-        self.notes = self.chord.pattern.map((c) => self.helpers.sortByNote(chord.charAt(0) + self.helpers.retrieveSharpOrFlat(chord.charAt(1)))[c]);
+        self.notes = self.chord.pattern.map((c) => self.sortedNotesArray[c]);
 
         return self;
     },
