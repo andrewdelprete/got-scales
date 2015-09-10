@@ -2,61 +2,9 @@
 
 import _ from 'lodash';
 
-const notesArray = [
-    'A',
-    'A# / Bb',
-    'B',
-    'C',
-    'C# / Db',
-    'D',
-    'D# / Eb',
-    'E',
-    'F',
-    'F# / Gb',
-    'G',
-    'G# / Ab'
-];
-
-/**
- * Scale Patterns
- * @type {Array}
- */
-export var scaleFormulas = [
-    {
-        name: 'Major',
-        pattern: [0, 2, 4, 5, 7, 9, 11, 12]
-    },
-    {
-        name: 'Minor',
-        pattern: [0, 2, 3, 5, 7, 8, 10, 12]
-    },
-    {
-        name: 'Harmonic Minor',
-        pattern: [0, 2, 3, 5, 7, 8, 9, 12]
-    }
-];
-
-/**
- * Chord Formulas
- * @type {Array}
- */
-export var chordFormulas = [
-    {
-        name: 'Major',
-        pattern: [0, 4, 7],
-        regex: /^[a-g]?(#|b)?(maj)?$/i
-    },
-    {
-        name: 'Major7',
-        pattern: [0, 4, 7, 11],
-        regex: /^[a-g]?(#|b)?(maj)?7$/i
-    },
-    {
-        name: 'Minor',
-        pattern: [0, 3, 7],
-        regex: /^[a-g]?(#|b)?(m)?(min)?$/i
-    }
-];
+import notesArray from './notesArray.es6';
+import scaleFormulas from './scaleFormulas.es6';
+import chordFormulas from './chordFormulas.es6';
 
 /**
  * A simple helper object that may be used between other objects
@@ -92,7 +40,7 @@ export var Helpers = {
         let afterNote = _.slice(notesArray, notePosition);
         let beforeNote = _.slice(notesArray, 0, notePosition);
 
-        // If formula goes passed the first internal of notes, add additional notes to the end of the array
+        // If formula goes passed the first interval of notes, add additional notes to the end of the array
         if (formula instanceof Array) {
             interval = _.max(formula) > 11 ? _.max(formula) : null
 
@@ -114,10 +62,12 @@ export var Helpers = {
      * @return { Object }
      */
     findFormula: function (formula, formulasType) {
+        // Ex: Cmaj7
         if (typeof formula === 'string') {
             formula = _.find(formulasType, (f) => f.name.toLowerCase() == formula.toLowerCase())
         }
 
+        // Ex: ['C', 'E', 'D', 'B']
         if (formula instanceof Array) {
             formula = _.find(formulasType, { formula })
         }
@@ -130,16 +80,14 @@ export var Helpers = {
     },
 
     /**
-     * Returns sharp '#' or 'b' flat if they exist and a blank string if not
-     * @param  {[type]} note [description]
-     * @return {[type]}      [description]
+     * Checks to see if given char is sharp '#' or flat 'b'
+     * @param  { String } note
+     * @return { Bool }
      */
-    retrieveSharpOrFlat: function (note) {
+    isSharpOrFlat: function (note) {
         if (note === '#' || note === 'b') {
             return note
         }
-
-        return ''
     }
 }
 
@@ -254,12 +202,14 @@ export var ChordFactory = {
         let self = Object.create(ChordFactory);
 
         // Private Methods
-        // Searches notesArray to find passed note
         self.passedChord = chord;
         self.chord = self.fetchChord(chord);
-        self.sortedNotesArray = self.helpers.sortByNote(chord.charAt(0) + self.helpers.retrieveSharpOrFlat(chord.charAt(1)));
 
         // Sorts the notesArray by the given rootNote on the chord and appends whether it's a sharp or flat
+        let note = chord.charAt(0);
+        let sharpOrFlat = self.helpers.isSharpOrFlat(chord.charAt(1)) ? chord.charAt(1) : ''
+
+        self.sortedNotesArray = self.helpers.sortByNote(note + sharpOrFlat);
         self.notes = self.chord.pattern.map((c) => self.sortedNotesArray[c]);
 
         return self;
