@@ -8,12 +8,33 @@ Got Scales? is a simple Javascript module that allows you to create music scales
 ## Install
 `> npm install got-scales --save-dev`
 
+## gotScales.note(name)
+Creates a new `note` instance.
+
+*name* - The name of the note. Can contain sharps and flats 'C', 'C#', 'Cb'.
+
+### Methods
+
+#### get()
+Returns the note `string` passed to the note() method.
+
+#### scale(formula, [,forceFormula])
+Creates a `scale` instance using the `note` passed.
+
+
+#### gotScales.scale(formula, [,forceFormula])
+Creates a `scale` instance with one of the pre-defined formulas found in `scaleFormulas.es6`.
+
+*formula* - The formula parameter can either be a `string` such as `Cmaj7` or an array of integers `[0, 3, 7]`.
+
+*forceFormula* - Allows creating a custom formula if it doesn't exist in the pre-defined formulas. `bool` defaults to `false`.
+
 
 ## Usage
 ```javascript
 import gotScales from 'got-scales'
 
-// Scales
+// How to use
 var gMajorScale = gotScales.note('G')
 var aCustomScale = gotScales.note('A')
 
