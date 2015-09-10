@@ -22,13 +22,20 @@ Returns the note `string` passed to the note() method.
 Creates a `scale` instance using the `note` passed.
 
 
-#### gotScales.scale(formula, [,forceFormula])
+## gotScales.scale(formula, [,forceFormula])
 Creates a `scale` instance with one of the pre-defined formulas found in `scaleFormulas.es6`.
 
 *formula* - The formula parameter can either be a `string` such as `Cmaj7` or an array of integers `[0, 3, 7]`.
 
 *forceFormula* - Allows creating a custom formula if it doesn't exist in the pre-defined formulas. `bool` defaults to `false`.
 
+### Methods
+
+#### get(int)
+Return a specific note in the scale.
+
+#### getNotes()
+Return an `array` of notes in the scale instance.
 
 ## Usage
 ```javascript
