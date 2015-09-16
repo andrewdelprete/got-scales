@@ -1,5 +1,5 @@
 import test from 'tape';
-import gotScales from '../src/gotScales.es6';
+import gotScales from '../src/gotScales.js';
 
 test('Should return single note with different note variations passed', function (t) {
     t.plan(4);
