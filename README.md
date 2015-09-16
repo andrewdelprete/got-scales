@@ -25,7 +25,7 @@ Creates a `scale` instance using the `note` passed.
 ## gotScales.scale(formula, [,forceFormula])
 Creates a `scale` instance with one of the pre-defined formulas found in `scaleFormulas.es6`.
 
-*formula* - The formula parameter can either be a `string` such as `Cmaj7` or an array of integers `[0, 3, 7]`.
+*formula* - The formula parameter can be either a `string` like `Cmaj7` or an array of integers `[0, 3, 7]`.
 
 *forceFormula* - Allows creating a custom formula if it doesn't exist in the pre-defined formulas. `bool` defaults to `false`.
 
@@ -51,5 +51,6 @@ console.log(aCustomScale.scale([0, 3, 7, 10, 11], true).getNotes()) // [ 'A', 'C
 // Chords
 var cMajorChord = gotScales.chord('Cmaj') // Can be 'C' or 'CMaj'
 var aMinorChord = gotScales.chord('Am') // Can be 'Am' or 'Amin'
+console.log(cMajorChord).getNotes()) // ['C','E','G']
 console.log(aMinorChord).getNotes()) // ['A','C','E']
 ```

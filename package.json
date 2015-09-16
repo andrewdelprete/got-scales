@@ -1,6 +1,6 @@
 {
   "name": "got-scales",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Got Scales? is a simple Javascript module that allows you to create music scales and chords.",
   "main": "build/gotScales.js",
   "scripts": {

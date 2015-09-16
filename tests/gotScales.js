@@ -29,8 +29,8 @@ test('Should create scale with the provided root note and pattern', function (t)
     var note = gotScales.note('C');
     t.deepEqual(note.scale('major').getNotes(), ['C','D','E','F','G','A','B','C']);
 
-    var note = gotScales.note('C#');
-    t.deepEqual(note.scale('major').getNotes(), ['C# / Db', 'D# / Eb', 'F', 'F# / Gb', 'G# / Ab', 'A# / Bb', 'C', 'C#']);
+    var note = gotScales.note('G');
+    t.deepEqual(note.scale('major').getNotes(), ['G', 'A', 'B', 'C', 'D', 'E', 'F# / Gb', 'G']);
 });
 
 test('Should create minor scale', function (t) {
@@ -48,9 +48,12 @@ test('Should create scale from a pattern array not in the default scales', funct
 });
 
 test('Should create different chords', function (t) {
-    t.plan(4);
+    t.plan(5);
 
     var chord = gotScales.chord("C#Maj");
+    t.deepEqual(chord.getNotes(), ['C# / Db', 'F', 'G# / Ab']);
+
+    var chord = gotScales.chord("DbMaj");
     t.deepEqual(chord.getNotes(), ['C# / Db', 'F', 'G# / Ab']);
 
     var chord = gotScales.chord("CMaj7");

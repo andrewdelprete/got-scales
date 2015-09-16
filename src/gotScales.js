@@ -2,9 +2,9 @@
 
 import _ from 'lodash';
 
-import notesArray from './notesArray.es6';
-import scaleFormulas from './scaleFormulas.es6';
-import chordFormulas from './chordFormulas.es6';
+import notesArray from './notesArray.js';
+import scaleFormulas from './scaleFormulas.js';
+import chordFormulas from './chordFormulas.js';
 
 /**
  * A simple helper object that may be used between other objects
@@ -17,26 +17,30 @@ export var Helpers = {
      * @return { Boolean }
      */
     fetchNote: function (note) {
-        var note = _.find(notesArray, (n) => {
-            return _.contains(n, note)
-        })
+        var natural = new RegExp('^' + note + '$', 'i')
+            natural = _.filter(notesArray, (n) => natural.test(n)).toString()
 
-        if (!note) {
+        var sharpOrFlat = new RegExp(note, 'i')
+            sharpOrFlat = _.filter(notesArray, (n) => sharpOrFlat.test(n)).toString()
+
+        if (!natural && !sharpOrFlat) {
             throw new Error('gotScales - Note does not exist.')
         }
 
-        return note
+        return natural ? natural : sharpOrFlat
     },
 
     /**
      * Returns a newly sorted array of notes starting at a given note
      * @param  { String } note
-     * @param  { Array } notesArray
+     * @param  { Array }
      * @return { Array }
      */
     sortByNote: function (note, formula) {
         let interval = null
-        let notePosition = _.findIndex(notesArray, (n) => _.contains(n, note))
+        let notePosition = _.findIndex(notesArray, (n) => {
+            return this.fetchNote(note) == n
+        });
         let afterNote = _.slice(notesArray, notePosition);
         let beforeNote = _.slice(notesArray, 0, notePosition);
 
@@ -85,9 +89,8 @@ export var Helpers = {
      * @return { Bool }
      */
     isSharpOrFlat: function (note) {
-        if (note === '#' || note === 'b') {
-            return note
-        }
+        var sharpOrFlat = new RegExp('[a-g]#|[a-g]b', 'i')
+        return sharpOrFlat.test(note)
     }
 }
 
@@ -103,7 +106,7 @@ export var NoteFactory = {
         // Add NoteFactory as a prototype
         let self = Object.create(NoteFactory);
 
-        // Private Methods
+        // Prototype Props / Methods
         self.passedNote = note;
         self.rootNote = self.helpers.fetchNote(note)
 
@@ -146,13 +149,10 @@ export var ScaleFactory = {
         // Add ScaleFactory as a prototype
         let self = Object.create(ScaleFactory);
 
-        // Private Methods
-        // Searches notesArray to find passed note
+        // Prototype Props / Methods
         self.rootNote = self.helpers.fetchNote(note);
         self.passedNote = note;
         self.sortedNotesArray = self.helpers.sortByNote(note, formula)
-
-        // console.log(self.sortedNotesArray)
 
         // By default we look for the passed formula and return the entire object if found
         if (!forceFormula) {
@@ -200,14 +200,18 @@ export var ChordFactory = {
     create: function(chord) {
         // Add ScaleFactory as a prototype
         let self = Object.create(ChordFactory);
+        let note = chord.charAt(0);
 
-        // Private Methods
+        // Prototype Props / Methods
         self.passedChord = chord;
         self.chord = self.fetchChord(chord);
 
         // Sorts the notesArray by the given rootNote on the chord and appends whether it's a sharp or flat
-        let note = chord.charAt(0);
-        let sharpOrFlat = self.helpers.isSharpOrFlat(chord.charAt(1)) ? chord.charAt(1) : ''
+        let sharpOrFlat = ''
+
+        if (self.helpers.isSharpOrFlat(chord)) {
+            sharpOrFlat = chord.charAt(1)
+        }
 
         self.sortedNotesArray = self.helpers.sortByNote(note + sharpOrFlat);
         self.notes = self.chord.pattern.map((c) => self.sortedNotesArray[c]);
