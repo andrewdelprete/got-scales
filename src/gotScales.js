@@ -149,7 +149,7 @@ export var ScaleFactory = {
         // Add ScaleFactory as a prototype
         let self = Object.create(ScaleFactory);
 
-        // Prototype Props / Methods
+        // Object Props / Methods
         self.rootNote = self.helpers.fetchNote(note);
         self.passedNote = note;
         self.sortedNotesArray = self.helpers.sortByNote(note, formula)
@@ -202,7 +202,7 @@ export var ChordFactory = {
         let self = Object.create(ChordFactory);
         let note = chord.charAt(0);
 
-        // Prototype Props / Methods
+        // Object Props / Methods
         self.passedChord = chord;
         self.chord = self.fetchChord(chord);
 
