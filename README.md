@@ -25,7 +25,7 @@ Creates a `scale` instance using the `note` passed.
 
 
 ## gotScales.scale(formula, [,forceFormula])
-Creates a `scale` instance with one of the pre-defined formulas found in `scaleFormulas.es6`.
+Creates a `scale` instance with one of the pre-defined formulas found in `scaleFormulas.js`.
 
 *formula* - The formula parameter can be either a `string` like `Cmaj7` or an array of integers `[0, 3, 7]`.
 
