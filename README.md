@@ -1,13 +1,10 @@
-# Got Scales? [![Build Status][ci-img]][ci]
-
-[ci-img]: https://travis-ci.org/Pathsofdesign/got-scales.svg
-[ci]: https://travis-ci.org/pathsofdesign/got-scales
+# Got Scales?
 
 Got Scales? is a simple Javascript module that allows you to create music scales and chords.
 ## Demo
-http://andrewdelprete.github.io/got-scales-riotjs
-
-http://gotscales-react-redux.surge.sh/
+https://andrewdelprete.github.io/got-scales-riotjs
+https://gotscales-react-redux.surge.sh/
+https://elm-gotscales.surge.sh
 
 ## Install
 `> npm install got-scales --save-dev`
