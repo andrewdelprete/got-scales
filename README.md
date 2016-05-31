@@ -1,9 +1,13 @@
 # Got Scales?
 
 Got Scales? is a simple Javascript module that allows you to create music scales and chords.
+
 ## Demo
+
 https://andrewdelprete.github.io/got-scales-riotjs
+
 https://gotscales-react-redux.surge.sh/
+
 https://elm-gotscales.surge.sh
 
 ## Install
